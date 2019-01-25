@@ -1,3 +1,14 @@
+/*
+ * main.case
+ *
+ * Main source code for STM32 microprocessor.
+ *
+ * Author: Joe Lane
+ * Created On: 01/24/2019
+ * Updated On: 01/25/2019
+ *
+ */
+
 #include "main.h"
 #include "uart.h"
 
