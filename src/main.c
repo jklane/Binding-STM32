@@ -21,21 +21,17 @@ void Uart_putstring(uint8_t *s, uint8_t len);
 static UART_HandleTypeDef UartHandle;
 static DMA_HandleTypeDef DMAHandle;
 
-void DMA1_Stream6_IRQHandler()
-{
+void DMA1_Stream6_IRQHandler() {
   HAL_DMA_IRQHandler(&DMAHandle);
 }
 
-void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart)
-{
+void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart) {
   HAL_GPIO_TogglePin(LED_GPIO_PORT, LED_PIN);
 }
 
-void HAL_UART_TxHalfCpltCallback(UART_HandleTypeDef *huart)
-{
+void HAL_UART_TxHalfCpltCallback(UART_HandleTypeDef *huart) {
   HAL_GPIO_TogglePin(LED_GPIO_PORT, LED_PIN);
 }
-
 
 int main(void) {
   HAL_Init();
@@ -45,12 +41,11 @@ int main(void) {
 
   uint8_t my_string[5];
 
-  while (1)
-  {
-    HAL_GPIO_TogglePin(LED_GPIO_PORT, LED_PIN);
-    HAL_UART_Receive(&UartHandle, my_string, sizeof(my_string), 5000);
-    Uart_putstring(&my_string[0], 5);
-    //HAL_Delay(1000);
+  while (1) {
+      HAL_GPIO_TogglePin(LED_GPIO_PORT, LED_PIN);
+      HAL_UART_Receive(&UartHandle, my_string, sizeof(my_string), 5000);
+      Uart_putstring(&my_string[0], 5);
+      //HAL_Delay(1000);
   }
 }
 
@@ -94,14 +89,13 @@ void Uart_Init() {
   UartHandle.Init.Mode         = UART_MODE_TX_RX;
   UartHandle.Init.OverSampling = UART_OVERSAMPLING_16;
 
-  if(HAL_UART_Init(&UartHandle) != HAL_OK) {
-    while(1){}
-  }
+if(HAL_UART_Init(&UartHandle) != HAL_OK) {
+  while(1){}
+}
 
 }
 
-void DMA_Init()
-{
+void DMA_Init() {
   __DMA1_CLK_ENABLE();
   DMAHandle.Instance = DMA1_Stream6;
   DMAHandle.Init.Channel = DMA_CHANNEL_4;
@@ -116,8 +110,7 @@ void DMA_Init()
   DMAHandle.Init.PeriphDataAlignment = DMA_PDATAALIGN_BYTE;
   DMAHandle.Init.MemDataAlignment = DMA_PDATAALIGN_BYTE;
 
-  if (HAL_DMA_Init(&DMAHandle) != HAL_OK)
-  {
+  if (HAL_DMA_Init(&DMAHandle) != HAL_OK) {
     while(1){}
   }
 
@@ -125,20 +118,12 @@ void DMA_Init()
   NVIC_EnableIRQ(DMA1_Stream6_IRQn);
 }
 
-void Uart_putstring(uint8_t *s, uint8_t len)
-{
+void Uart_putstring(uint8_t *s, uint8_t len) {
   HAL_UART_Transmit(&UartHandle, s, len, 1000);
-  /*
-  for(int i = 0; i < len; i++)
-  {
-    Uart_putchar(s[i]);
-  }
-  */
 }
 
-void Uart_putchar(char c)
-{
-    HAL_UART_Transmit(&UartHandle, (uint8_t*)(&c), 1, 1000);
+void Uart_putchar(char c) {
+  HAL_UART_Transmit(&UartHandle, (uint8_t*)(&c), 1, 1000);
 }
 
 void SysTick_Handler(void) {
